@@ -6,7 +6,7 @@
     "cbor": "^1.0.4",
     "coap": "^0.16.0",
     "h5.linkformat": "0.0.0",
-    "uri-js": "^3.0.2"
+    "uri-js": "https://github.com/Ell-i/uri-js/tarball/f3c16704228c48c45181523e59f2cfa6501b3548"
   },
   "devDependencies": {
     "express": "^4.13.4",
