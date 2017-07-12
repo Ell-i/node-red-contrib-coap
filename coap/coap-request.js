@@ -19,20 +19,16 @@ module.exports = function(RED) {
         node.options.name = n.name;
         node.options.url = n.url;
         node.options.contentFormat = n['content-format'];
+        node.options.outputFormat = n['output-format'];
         node.options.rawBuffer = n['raw-buffer'];
 
         function _constructPayload(msg, contentFormat) {
-            var payload = null;
-
-            if (contentFormat === 'text/plain') {
-                payload = msg.payload;
-            } else if (contentFormat === 'application/json') {
-                payload = JSON.stringify(msg.payload);
-            } else if (contentFormat === 'application/cbor') {
-                payload = cbor.encode(msg.payload);
+            switch (contentFormat) {
+            case 'text/plain':       return msg.payload;
+            case 'application/json': return JSON.stringify(msg.payload);
+            case 'application/cbor': return cbor.encode(msg.payload);
+            default: return undefined;
             }
-
-            return payload;
         }
 
         function _makeRequest(msg) {
@@ -45,7 +41,12 @@ module.exports = function(RED) {
             function _onResponse(res) {
 
                 function _send(payload) {
+                    switch (node.options.outputFormat) {
+                    case 'application/json': payload = { [node.options.name]: { value: Number(payload) } };
+                    }
+
                     node.send(Object.assign({}, msg, {
+                        requestOptions: reqOpts,
                         payload: payload,
                         headers: res.headers,
                         statusCode: res.code,
@@ -80,7 +81,8 @@ module.exports = function(RED) {
                 }
             }
 
-            var payload = _constructPayload(msg, node.options.contentFormat);
+            var payload = _constructPayload(
+                msg, node.options.contentFormat);
 
             if (node.options.observe === true) {
                 reqOpts.observe = '1';
