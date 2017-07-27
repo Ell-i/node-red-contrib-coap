@@ -25,7 +25,7 @@ module.exports = function(RED) {
         function _constructPayload(msg, contentFormat) {
             switch (contentFormat) {
             case 'text/plain':       return msg.payload;
-            case 'application/json': return JSON.stringify(msg.payload);
+            case 'application/json': return JSON.parse(msg.payload);
             case 'application/cbor': return cbor.encode(msg.payload);
             default: return undefined;
             }
@@ -42,7 +42,10 @@ module.exports = function(RED) {
 
                 function _send(payload) {
                     switch (node.options.outputFormat) {
-                    case 'application/json': payload = { [node.options.name]: { value: Number(payload) } };
+                    case 'application/json':
+			const name = reqOpts.pathname.split('/').pop();
+			payload = { [name]: payload };
+			break;
                     }
 
                     node.send(Object.assign({}, msg, {
@@ -81,8 +84,7 @@ module.exports = function(RED) {
                 }
             }
 
-            var payload = _constructPayload(
-                msg, node.options.contentFormat);
+            var payload = _constructPayload(msg, node.options.contentFormat);
 
             if (node.options.observe === true) {
                 reqOpts.observe = '1';
@@ -91,7 +93,7 @@ module.exports = function(RED) {
             }
 
             //TODO: should revisit this block
-            if (node.stream) {
+            if (node.stream && node.stream.close) {
                 node.stream.close();
             }
 
