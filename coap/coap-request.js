@@ -44,9 +44,9 @@ module.exports = function(RED) {
                 function _send(payload) {
                     switch (node.options.outputFormat) {
                     case 'application/json':
-			const name = reqOpts.pathname.split('/').pop();
-			payload = { [name]: payload };
-			break;
+                        const name = reqOpts.pathname.split('/').pop();
+                        payload = { [name]: payload };
+                        break;
                     }
 
                     node.send(Object.assign({}, msg, {
