@@ -18,6 +18,7 @@ module.exports = function(RED) {
         node.options.observe = n.observe;
         node.options.name = n.name;
         node.options.url = n.url;
+        node.options.proxy = n.proxy;
         node.options.contentFormat = n['content-format'];
         node.options.outputFormat = n['output-format'];
         node.options.rawBuffer = n['raw-buffer'];
@@ -90,6 +91,17 @@ module.exports = function(RED) {
                 reqOpts.observe = '1';
             } else {
                 delete reqOpts.observe;
+            }
+
+            if (node.options.proxy && node.options.proxy.length) {
+                const proxy = url.parse(node.options.proxy);
+                reqOpts.proxyUri = node.options.url;
+                reqOpts.host = proxy.host;
+                reqOpts.port = proxy.port;
+                delete reqOpts.pathname;
+                delete reqOpts.query;
+            } else {
+                delete reqOpts.proxyUri;
             }
 
             //TODO: should revisit this block

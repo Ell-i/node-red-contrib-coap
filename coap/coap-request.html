@@ -10,6 +10,7 @@
             },
             observe: {value:false, required:true},
             url: {value:""},
+            proxy: {value:""},
             'content-format': {value: "text/plain"},
             'output-format': {value: "text/plain"},
             'raw-buffer': {value: false, required:true},
@@ -32,6 +33,10 @@
     <div class="form-row">
         <label for="node-input-url"><i class="fa fa-globe"></i> URL</label>
         <input type="text" id="node-input-url" placeholder="coap://localhost/test"/>
+    </div>
+    <div class="form-row">
+      <label for="node-input-proxy"><i class="fa fa-globe"></i> Proxy</label>
+        <input type="text" id="node-input-proxy" placeholder=""/>
     </div>
     <div class="form-row">
         <label for="node-input-method"><i class="fa fa-tasks"></i> Method</label>
@@ -71,7 +76,8 @@
         <input type="text" id="node-input-name" placeholder="foobar"/>
     </div>
     <div class="form-tips">
-        Tip: Leave url or method blank if you want to set them via msg properties.
+        Leave url or method blank if you want to set them via msg properties.
+        The proxy shall be empty, unless you want to use a CoAP proxy.
     </div>
 </script>
 
@@ -83,6 +89,10 @@
         If the target endpoint supports <i>pub/sub</i>, you will get updated resource
         represantations in addition to the initial one
         (<a href="http://tools.ietf.org/html/draft-ietf-core-observe-11">draft-ietf-core-observe-11</a>).</p>
+
+    <p>The CoAP Proxy defines a CoAP proxy host and port, as an URL.
+        Leave empty if you don't use a proxy.
+        For example, the proxy can be <code>coap://192.168.1.1</code>.
 
     <p>The output message payload format (<i>Output Format</i>) can be set to
         <code>text/plain</code> or <code>application/json</code>.  If the latter,
