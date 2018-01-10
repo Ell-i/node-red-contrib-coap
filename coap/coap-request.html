@@ -9,6 +9,7 @@
                 function(v){return [ "", "GET", "PUT", "POST", "DELETE" ].indexOf(v) !== -1;}
             },
             observe: {value:false, required:true},
+            observe_deregister: {value:false, required:true},
             url: {value:""},
             proxy: {value:""},
             'content-format': {value: "text/plain"},
@@ -53,6 +54,8 @@
         <label/>
         <input id="node-input-observe" type="checkbox" style="display: inline-block; width: auto; vertical-align: top;"/>
         <label for="node-input-observe" style="width: auto; margin-right: 1em;">Observe?</label>
+	<input id="node-input-observe_deregister" type="checkbox" style="display: inline-block; width: auto; vertical-align: top;"/>
+        <label for="node-input-observe_deregister" style="width: auto; margin-right: 1em;">Deregister?</label>
         <input id="node-input-raw-buffer" type="checkbox" style="display: inline-block; width: auto; vertical-align: top;"/>
         <label for="node-input-raw-buffer" style="width: auto; margin-right: 1em;">Raw buffer?</label>
     </div>
@@ -86,6 +89,7 @@
 
     <p>The CoAP URL, request method and content serialization format (<i>CoAP Format</i>)
         can be configured. Also, you can add <i>Observe</i> header to your request.
+        If you want to deregister a running Observe, use <i>Deregister</i>.
         If the target endpoint supports <i>pub/sub</i>, you will get updated resource
         represantations in addition to the initial one
         (<a href="http://tools.ietf.org/html/draft-ietf-core-observe-11">draft-ietf-core-observe-11</a>).</p>

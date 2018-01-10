@@ -16,6 +16,7 @@ module.exports = function(RED) {
         node.options = {};
         node.options.method = n.method;
         node.options.observe = n.observe;
+        node.options.observe_deregister = n.observe_deregister;
         node.options.name = n.name;
         node.options.url = n.url;
         node.options.proxy = n.proxy;
@@ -80,15 +81,20 @@ module.exports = function(RED) {
 
                 res.on('data', _onResponseData);
 
-                if (reqOpts.observe) {
+                if (reqOpts.observe && !reqOpts.observe == 0) {
                     node.stream = res;
                 }
             }
 
             var payload = _constructPayload(msg, node.options.contentFormat);
 
-            if (node.options.observe === true) {
-                reqOpts.observe = '1';
+            if (node.options.observe === true || node.options.observe_deregister === true) {
+                if (node.options.observe_deregister === true) {
+                    reqOpts.observe = 1; // RFC 7641 Section 2
+                } else {
+                    reqOpts.observe = 0;
+                }
+                node.log('observe=' + reqOpts.observe);
             } else {
                 delete reqOpts.observe;
             }
